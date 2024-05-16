@@ -6,21 +6,25 @@ def selecionarArquivo(label):
     file = filedialog.askopenfilename()
     label.config(text=file)
 
+def selecionarPasta(label):
+    folder = filedialog.askdirectory()
+    label.config(text=folder)
+
 def executeFilter():
     operadora = entryOperadora.get()
     for i in listboxTec.curselection():
         tecnologia = listboxTec.get(i)
         
     oldFile = open(labelFile.cget("text"), "r")
-    newFile0 = open("/home/andrey/Desktop/Teste/file_earth_80.txt", "w")
-    newFile1 = open("/home/andrey/Desktop/Teste/file_earth_85.txt", "w")
-    newFile2 = open("/home/andrey/Desktop/Teste/file_earth_90.txt", "w")
-    newFile3 = open("/home/andrey/Desktop/Teste/file_earth_95.txt", "w")
-    newFile4 = open("/home/andrey/Desktop/Teste/file_earth_100.txt", "w")
-    newFile5 = open("/home/andrey/Desktop/Teste/file_earth_102.txt", "w")
-    newFile6 = open("/home/andrey/Desktop/Teste/file_earth_105.txt", "w")
-    newFile7 = open("/home/andrey/Desktop/Teste/file_earth_110.txt", "w")
-    newFile8 = open("/home/andrey/Desktop/Teste/file_earth_NS.txt", "w")
+    newFile0 = open(labelFolder.cget("text") + "/file_earth_80.txt", "w")
+    newFile1 = open(labelFolder.cget("text") + "/file_earth_85.txt", "w")
+    newFile2 = open(labelFolder.cget("text") + "/file_earth_90.txt", "w")
+    newFile3 = open(labelFolder.cget("text") + "/file_earth_95.txt", "w")
+    newFile4 = open(labelFolder.cget("text") + "/file_earth_100.txt", "w")
+    newFile5 = open(labelFolder.cget("text") + "/file_earth_102.txt", "w")
+    newFile6 = open(labelFolder.cget("text") + "/file_earth_105.txt", "w")
+    newFile7 = open(labelFolder.cget("text") + "/file_earth_110.txt", "w")
+    newFile8 = open(labelFolder.cget("text") + "/file_earth_NS.txt", "w")
 
     for line in oldFile:
         data = line.split()
@@ -31,11 +35,12 @@ def executeFilter():
             newFile1.write(line)
             newFile2.write(line)
             newFile3.write(line)
-            newFile5.write(line)
+            newFile4.write(line)
             newFile5.write(line)
             newFile6.write(line)
             newFile7.write(line)
             newFile8.write(line)
+
         elif data[3] == operadora and data[4] == tecnologia:
             line = line.replace("\n", "\t")
             value = float(data[5]) 
@@ -109,8 +114,16 @@ labelFile.grid(row=3, column=0)
 buttonFile = Button(janela, text="...", command=lambda: selecionarArquivo(labelFile))
 buttonFile.grid(row=3, column=1)
 
+# Caminho Pasta
+labelFolder = Label(janela, text="Nenhuma pasta selecionada")
+labelFolder.grid(row=4, column=0)
+
+# Selecionar Pasta
+buttonPasta = Button(janela, text="...", command=lambda: selecionarPasta(labelFolder))
+buttonPasta.grid(row=4, column=1)
+
 # Botão Executar
 buttonEnter = Button(janela, text="Executar", command=executeFilter)
-buttonEnter.grid(row=4, column=0)
+buttonEnter.grid(row=5, column=0)
 
 janela.mainloop()
