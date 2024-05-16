@@ -1,4 +1,5 @@
 from tkinter import *
+from simplekml import *
 from tkinter import messagebox
 from tkinter import filedialog
 
@@ -26,6 +27,16 @@ def executeFilter():
     newFile7 = open(labelFolder.cget("text") + "/file_earth_110.txt", "w")
     newFile8 = open(labelFolder.cget("text") + "/file_earth_NS.txt", "w")
 
+    kml0 = Kml()
+    kml1 = Kml()
+    kml2 = Kml()
+    kml3 = Kml()
+    kml4 = Kml()
+    kml5 = Kml()
+    kml6 = Kml()
+    kml7 = Kml()
+    kml8 = Kml()
+
     for line in oldFile:
         data = line.split()
 
@@ -46,6 +57,7 @@ def executeFilter():
             value = float(data[5]) 
             
             if value >= -80:
+                kml0.newpoint(coords=[(float(data[1]), float(data[2]))])
                 line += "#800000\n"
                 newFile0.write(line)
             elif -80 > value >= -85:
@@ -83,6 +95,16 @@ def executeFilter():
     newFile6.close()
     newFile7.close()
     newFile8.close()
+
+    kml0.savekmz("teste1.kml")
+    kml1.savekmz("teste2.kml")
+    kml2.savekmz("teste3.kml")
+    kml3.savekmz("teste4.kml")
+    kml4.savekmz("teste5.kml")
+    kml5.savekmz("teste6.kml")
+    kml6.savekmz("teste7.kml")
+    kml7.savekmz("teste8.kml")
+    kml8.savekmz("teste9.kml")
     
     messagebox.showinfo("AVISO", "Filtragem realizada!")
     
