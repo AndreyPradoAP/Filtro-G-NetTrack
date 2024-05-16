@@ -1,13 +1,17 @@
 from tkinter import *
 from tkinter import messagebox
-#from tkinter.filedialog import askdirectory
+from tkinter import filedialog
+
+def selecionarArquivo(label):
+    file = filedialog.askopenfilename()
+    label.config(text=file)
 
 def executeFilter():
     operadora = entryOperadora.get()
     for i in listboxTec.curselection():
         tecnologia = listboxTec.get(i)
         
-    oldFile = open("/home/andrey/Desktop/Teste/drive_test.txt", "r")
+    oldFile = open(labelFile.cget("text"), "r")
     newFile0 = open("/home/andrey/Desktop/Teste/file_earth_80.txt", "w")
     newFile1 = open("/home/andrey/Desktop/Teste/file_earth_85.txt", "w")
     newFile2 = open("/home/andrey/Desktop/Teste/file_earth_90.txt", "w")
@@ -80,6 +84,7 @@ def executeFilter():
 
 janela = Tk()
 janela.title("Organizador Drive Test")
+janela.geometry("500x300")
 
 # Componentes Operadora
 labelOperadora = Label(janela, text="Operadora (Conforme no arquivo NetTrack):")
@@ -96,9 +101,13 @@ listboxTec.insert(0, "5G")
 listboxTec.insert(1, "4G")
 listboxTec.insert(2, "3G")
 
-'''# Selecionar Arquivo
-buttonFile = Button(janela, text="...", command=selecionarPasta())
-buttonFile.grid(row=3, column=0)'''
+# Caminho Arquivo
+labelFile = Label(janela, text="Nenhum arquivo selecionado")
+labelFile.grid(row=3, column=0)
+
+# Selecionar Arquivo
+buttonFile = Button(janela, text="...", command=lambda: selecionarArquivo(labelFile))
+buttonFile.grid(row=3, column=1)
 
 # Botão Executar
 buttonEnter = Button(janela, text="Executar", command=executeFilter)
