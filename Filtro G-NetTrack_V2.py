@@ -3,6 +3,8 @@ from simplekml import *
 from tkinter import messagebox
 from tkinter import filedialog
 
+descript = '<style>table{ border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 10px; border: 1px solid black; }</style> <table> <tr> <td><p align="center"><b>Tecnologia</p></th> <td><p align="center">tec</p></th></tr> <tr><td><p align="center"><b>Operadora</p></th><td><p align="center">oper</p></th></tr> <tr><td><p align="center"><b>RSRP</p></th><td><p align="center">rsrp</p></b></p></th></tr> <tr><td><p align="center"><b>Tempo</p></td><td><p align="center">temp</p></b></p></th></tr> </table>'
+
 def selecionarArquivo(label):
     file = filedialog.askopenfilename()
     label.config(text=file)
@@ -17,31 +19,25 @@ def executeFilter():
         tecnologia = listboxTec.get(i)
         
     oldFile = open(labelFile.cget("text"), "r")
-    newFile0 = open(labelFolder.cget("text") + "/file_earth_80.txt", "w")
-    newFile1 = open(labelFolder.cget("text") + "/file_earth_85.txt", "w")
-    newFile2 = open(labelFolder.cget("text") + "/file_earth_90.txt", "w")
-    newFile3 = open(labelFolder.cget("text") + "/file_earth_95.txt", "w")
-    newFile4 = open(labelFolder.cget("text") + "/file_earth_100.txt", "w")
-    newFile5 = open(labelFolder.cget("text") + "/file_earth_102.txt", "w")
-    newFile6 = open(labelFolder.cget("text") + "/file_earth_105.txt", "w")
-    newFile7 = open(labelFolder.cget("text") + "/file_earth_110.txt", "w")
-    newFile8 = open(labelFolder.cget("text") + "/file_earth_NS.txt", "w")
+    
+    descript = '<style>table{ border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 10px; border: 1px solid black; }</style> <table> <tr> <td><p align="center"><b>Tecnologia</p></th> <td><p align="center">' + tecnologia + '</p></th></tr> <tr><td><p align="center"><b>Operadora</p></th><td><p align="center">' + operadora + '</p></th></tr> <tr><td><p align="center"><b>RSRP</p></th><td><p align="center">rsrpdBm</p></b></p></th></tr> </table>'
 
-    kml0 = Kml()
-    kml1 = Kml()
-    kml2 = Kml()
-    kml3 = Kml()
-    kml4 = Kml()
-    kml5 = Kml()
-    kml6 = Kml()
-    kml7 = Kml()
-    kml8 = Kml()
+    kml = Kml()
+    fold1 = kml.newdocument(name="Sinal até -80")
+    fold2 = kml.newdocument(name="Sinal de -80 até -85")
+    fold3 = kml.newdocument(name="Sinal de -85 até -90")
+    fold4 = kml.newdocument(name="Sinal de -90 até -95")
+    fold5 = kml.newdocument(name="Sinal de -95 até -100")
+    fold6 = kml.newdocument(name="Sinal de -100 até -102")
+    fold7 = kml.newdocument(name="Sinal de -102 até -105")
+    fold8 = kml.newdocument(name="Sinal de -105 até -110")
+    fold9 = kml.newdocument(name="Sinal -110")
 
     for line in oldFile:
         data = line.split()
 
         if(data[0] == "Timestamp"):
-            line = line.replace("Filemark", "Color")
+            '''line = line.replace("Filemark", "Color")
             newFile0.write(line)
             newFile1.write(line)
             newFile2.write(line)
@@ -50,61 +46,63 @@ def executeFilter():
             newFile5.write(line)
             newFile6.write(line)
             newFile7.write(line)
-            newFile8.write(line)
+            newFile8.write(line)'''
 
         elif data[3] == operadora and data[4] == tecnologia:
             line = line.replace("\n", "\t")
             value = float(data[5]) 
             
             if value >= -80:
-                kml0.newpoint(coords=[(float(data[1]), float(data[2]))])
-                line += "#800000\n"
-                newFile0.write(line)
+                point = fold1.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ff000080' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
             elif -80 > value >= -85:
-                line += "#ff0000\n"
-                newFile1.write(line)
+                point = fold2.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ff0000ff' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
             elif -85 > value >= -90:
-                line += "#ff8080\n"
-                newFile2.write(line)
+                point = fold3.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ff8080ff' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
             elif -90 > value >= -95:
-                line += "#ffff00\n"
-                newFile3.write(line)
+                point = fold4.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ff00ffff' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
             elif -95 > value >= -100:
-                line += "#00ff00\n"
-                newFile4.write(line)
+                point = fold5.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ff00ff00' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
             elif -100 > value >= -102:
-                line += "#00ffff\n"
-                newFile5.write(line)
+                point = fold6.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ffffff00' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
+                line += "#00ff00\n"
             elif -102 > value >= -105:
+                point = fold7.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ffff8080' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
                 line += "#00ffff\n"
-                newFile6.write(line)
             elif -105 > value >= -110:
-                line += "#0000ff\n"
-                newFile7.write(line)
+                point = fold8.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ffff0000' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
             else:
-                line += "#000000\n"
-                newFile8.write(line)
+                point = fold9.newpoint(coords=[(float(data[1]), float(data[2]))])
+                point.iconstyle.icon.href = 'https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png'
+                point.style.iconstyle.color = '#ff000000' #aabbggrr
+                point.description = descript.replace("rsrp", data[5])
 
     oldFile.close()
-    newFile0.close()
-    newFile1.close()
-    newFile2.close()
-    newFile3.close()
-    newFile4.close()
-    newFile5.close()
-    newFile6.close()
-    newFile7.close()
-    newFile8.close()
 
-    kml0.savekmz("teste1.kml")
-    kml1.savekmz("teste2.kml")
-    kml2.savekmz("teste3.kml")
-    kml3.savekmz("teste4.kml")
-    kml4.savekmz("teste5.kml")
-    kml5.savekmz("teste6.kml")
-    kml6.savekmz("teste7.kml")
-    kml7.savekmz("teste8.kml")
-    kml8.savekmz("teste9.kml")
+    kml.savekmz("drive_test.kml")
     
     messagebox.showinfo("AVISO", "Filtragem realizada!")
     
