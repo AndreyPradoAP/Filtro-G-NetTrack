@@ -1,3 +1,23 @@
+'''
+    Criador: Andrey Prado de Oliveira
+
+    O software tem como objetivo condensar e organizar os dados do arquivo .txt
+    concedido pelo software G-NetTrack ao finalizar o teste em modo drive.
+
+    Como usar:
+        Ao executar o software, é necessário inserir as segintes informações:
+            - Nome da operadora (Conforme consta no arquivo .txt)
+            - Tecnologia em testes (Só é possível escolher uma)
+            - Local do arquivo .txt
+            - Local onde o arquivo .kml será salvo
+
+        Se alguma das informações estiver faltante a selecionar o botão "Executar", 
+        poderão ocorrer erros.
+
+    Melhorias a serem feitas:
+        - Tratamento de erros.
+'''
+
 from tkinter import *
 from simplekml import *
 from tkinter import messagebox
