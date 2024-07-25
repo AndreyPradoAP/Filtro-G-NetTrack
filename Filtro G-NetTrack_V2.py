@@ -3,24 +3,22 @@ from simplekml import *
 from tkinter import messagebox
 from tkinter import filedialog
 
-descript = '<style>table{ border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 10px; border: 1px solid black; }</style> <table> <tr> <td><p align="center"><b>Tecnologia</p></th> <td><p align="center">tec</p></th></tr> <tr><td><p align="center"><b>Operadora</p></th><td><p align="center">oper</p></th></tr> <tr><td><p align="center"><b>RSRP</p></th><td><p align="center">rsrp</p></b></p></th></tr> <tr><td><p align="center"><b>Tempo</p></td><td><p align="center">temp</p></b></p></th></tr> </table>'
-
-def selecionarArquivo(label):
+def selectFile(label):
     file = filedialog.askopenfilename()
     label.config(text=file)
 
-def selecionarPasta(label):
+def selectFolder(label):
     folder = filedialog.askdirectory()
     label.config(text=folder)
 
-def executeFilter():
-    operadora = entryOperadora.get()
+def runFilter():
+    operator = entryOperator.get()
     for i in listboxTec.curselection():
-        tecnologia = listboxTec.get(i)
+        technology = listboxTec.get(i)
         
-    oldFile = open(labelFile.cget("text"), "r")
+    file = open(labelFile.cget("text"), "r")
     
-    descript = '<style>table{ border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 10px; border: 1px solid black; }</style> <table> <tr> <td><p align="center"><b>Tecnologia</p></th> <td><p align="center">' + tecnologia + '</p></th></tr> <tr><td><p align="center"><b>Operadora</p></th><td><p align="center">' + operadora + '</p></th></tr> <tr><td><p align="center"><b>RSRP</p></th><td><p align="center">rsrpdBm</p></b></p></th></tr> </table>'
+    descript = '<style>table{ border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 10px; border: 1px solid black; }</style> <table> <tr> <td><p align="center"><b>Tecnologia</p></th> <td><p align="center">' + technology + '</p></th></tr> <tr><td><p align="center"><b>Operadora</p></th><td><p align="center">' + operator + '</p></th></tr> <tr><td><p align="center"><b>RSRP</p></th><td><p align="center">rsrpdBm</p></b></p></th></tr> </table>'
 
     kml = Kml()
     fold1 = kml.newdocument(name="Sinal até -80")
@@ -31,24 +29,12 @@ def executeFilter():
     fold6 = kml.newdocument(name="Sinal de -100 até -102")
     fold7 = kml.newdocument(name="Sinal de -102 até -105")
     fold8 = kml.newdocument(name="Sinal de -105 até -110")
-    fold9 = kml.newdocument(name="Sinal -110")
+    fold9 = kml.newdocument(name="Sinal a partir de -110")
 
-    for line in oldFile:
+    for line in file:
         data = line.split()
 
-        if(data[0] == "Timestamp"):
-            '''line = line.replace("Filemark", "Color")
-            newFile0.write(line)
-            newFile1.write(line)
-            newFile2.write(line)
-            newFile3.write(line)
-            newFile4.write(line)
-            newFile5.write(line)
-            newFile6.write(line)
-            newFile7.write(line)
-            newFile8.write(line)'''
-
-        elif data[3] == operadora and data[4] == tecnologia:
+        if data[3] == operator and data[4] == technology:
             line = line.replace("\n", "\t")
             value = float(data[5]) 
             
@@ -100,50 +86,49 @@ def executeFilter():
                 point.style.iconstyle.color = '#ff000000' #aabbggrr
                 point.description = descript.replace("rsrp", data[5])
 
-    oldFile.close()
+    file.close()
 
-    kml.savekmz("drive_test.kml")
+    kml.savekmz(labelFolder.cget("text") + "/drive_test.kml")
     
     messagebox.showinfo("AVISO", "Filtragem realizada!")
     
-
-janela = Tk()
-janela.title("Organizador Drive Test")
-janela.geometry("500x300")
+window = Tk()
+window.title("Organizador Drive Test")
+window.geometry("400x250")
 
 # Componentes Operadora
-labelOperadora = Label(janela, text="Operadora (Conforme no arquivo NetTrack):")
-labelOperadora.grid(row=0, column=0)
-entryOperadora = Entry(janela)
-entryOperadora.grid(row=0, column=1)
+labelOperator = Label(window, text="Nome da Operadora (Conforme no arquivo .txt):")
+labelOperator.place(x=0, y=0)
+entryOperator = Entry(window)
+entryOperator.place(x=265, y=2)
 
 # Componentes Tecnologia
-labelTecnologia = Label(janela, text="Tecnoologia: ")
-labelTecnologia.grid(row=1, column=0)
-listboxTec = Listbox(janela)
-listboxTec.grid(row=2, column=0)
+labelTechnology = Label(window, text="Geração: ")
+labelTechnology.place(x=45, y=30)
+listboxTec = Listbox(window, height=3)
+listboxTec.place(x=10, y=50)
 listboxTec.insert(0, "5G")
 listboxTec.insert(1, "4G")
 listboxTec.insert(2, "3G")
 
-# Caminho Arquivo
-labelFile = Label(janela, text="Nenhum arquivo selecionado")
-labelFile.grid(row=3, column=0)
-
 # Selecionar Arquivo
-buttonFile = Button(janela, text="...", command=lambda: selecionarArquivo(labelFile))
-buttonFile.grid(row=3, column=1)
+buttonFile = Button(window, text="Selecionar\nArquivo", command=lambda: selectFile(labelFile))
+buttonFile.place(x=5, y=120)
 
-# Caminho Pasta
-labelFolder = Label(janela, text="Nenhuma pasta selecionada")
-labelFolder.grid(row=4, column=0)
+# Caminho Arquivo
+labelFile = Label(window, text="Nenhum arquivo selecionado")
+labelFile.place(x=70, y=130)
 
 # Selecionar Pasta
-buttonPasta = Button(janela, text="...", command=lambda: selecionarPasta(labelFolder))
-buttonPasta.grid(row=4, column=1)
+buttonFolder = Button(window, text="Selecionar\nPasta", command=lambda: selectFolder(labelFolder))
+buttonFolder.place(x=5, y=170)
+
+# Caminho Pasta
+labelFolder = Label(window, text="Nenhuma pasta selecionada")
+labelFolder.place(x=70, y=180)
 
 # Botão Executar
-buttonEnter = Button(janela, text="Executar", command=executeFilter)
-buttonEnter.grid(row=5, column=0)
+buttonEnter = Button(window, text="Executar", command=runFilter)
+buttonEnter.place(x=200, y=220)
 
-janela.mainloop()
+window.mainloop()
