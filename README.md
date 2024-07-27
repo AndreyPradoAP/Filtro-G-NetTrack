@@ -1,4 +1,5 @@
 # Filtro G-NetTrack
 
-  Software construído em python com interface gráfica criada por meio da biblioteca Tkinter
-  Tem como objetivo manipular os dados provindos do arquivo de texto exportado pelo software G-NetTrack
+Software para organização dos dados gerados pelo software G-NetTrack, utlizando o arquivo .txt esportado pelo G-NetTrack para criar um arquivo .kml.
+
+O arquivo executável e o código fonte do software Organizador está disponibilizado
